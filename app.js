@@ -1,4 +1,3 @@
-
 import Globe from './Globe.js';
 import LayersViewModel from './LayersViewModel.js';
 import SettingsViewModel from './SettingsViewModel.js';
@@ -183,7 +182,7 @@ $(document).ready(function () {
         satelliteModel.scale = 2e6;
         ISSLayer.addRenderable(satelliteModel)
 
-        globe.wwd.goTo(new WorldWind.Location(lat, lng));
+        globe.wwd.goTo(new WorldWind.Position(lat, lng, 25000000));
 
         // Store the model reference globally for easy access
         window.currentSatelliteModel = satelliteModel;
@@ -282,8 +281,8 @@ $(document).ready(function () {
           satelliteModel.scale = scale;
           ISSLayer.addRenderable(satelliteModel);
           
-          // Go to the satellite's current position
-          globe.wwd.goTo(new WorldWind.Location(lat, lng));
+          // Go to the satellite's current position with a higher altitude (less zoomed in)
+          globe.wwd.goTo(new WorldWind.Position(lat, lng, 30000000));
           
           // Store the model reference globally
           window.currentSatelliteModel = satelliteModel;
