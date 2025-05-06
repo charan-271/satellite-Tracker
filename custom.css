@@ -1,0 +1,539 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+}
+
+.globe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    z-index: 1;
+}
+
+/* App title in top left */
+.app-title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 500;
+    z-index: 100;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.app-title img {
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
+    margin-right: 10px;
+}
+
+/* Side navigation on right side */
+.side-nav {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 100;
+}
+
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(33, 33, 33, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    outline: none;
+}
+
+.nav-button:hover {
+    background-color: rgba(47, 128, 237, 0.7);
+    transform: scale(1.1);
+}
+
+.nav-button.active {
+    background-color: rgba(47, 128, 237, 0.9);
+    box-shadow: 0 0 15px rgba(47, 128, 237, 0.5);
+    transform: scale(1.1);
+}
+
+.nav-tooltip {
+    position: absolute;
+    right: 60px;
+    background-color: rgba(33, 33, 33, 0.9);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-button:hover .nav-tooltip {
+    opacity: 1;
+}
+
+.overlay-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.globe-overlay {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    width: 350px;
+    max-width: 90vw;
+    max-height: 85vh;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-columns {
+    column-count: 1 !important;
+    width: 100%;
+}
+
+.collapse.panel-collapse {
+    width: 100%;
+    display: none;
+}
+
+.collapse.panel-collapse.show {
+    display: block;
+}
+
+.globe-card {
+    background: rgba(33, 33, 33, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    width: 100%;
+    min-width: 300px;
+}
+
+.globe-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+}
+
+.card-body {
+    padding: 15px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Specific styling for flyover panel to ensure scrollable content */
+#flyover .card-body {
+    max-height: calc(80vh - 60px);
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Add custom scrollbar styling for better appearance */
+#flyover .card-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+#flyover .card-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+#flyover .card-body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+#flyover .card-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.list-group-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    margin-bottom: 5px;
+    border-radius: 4px !important;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(3px);
+}
+
+.list-group-item.active {
+    background-color: rgba(47, 128, 237, 0.6);
+    border-color: rgba(47, 128, 237, 0.8);
+}
+
+.btn {
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: rgba(47, 128, 237, 0.8);
+    border-color: rgba(47, 128, 237, 0.8);
+}
+
+.btn-primary:hover {
+    background-color: rgba(47, 128, 237, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-radius: 4px;
+}
+
+.form-control:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(47, 128, 237, 0.5);
+    color: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(47, 128, 237, 0.25);
+}
+
+/* Modal styling */
+.modal-content {
+    background-color: rgba(33, 33, 33, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+}
+
+.modal-body-canvas {
+    max-height: 300px;
+    height: 30vh;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.modal-body-table {
+    max-height: calc(40vh - 71px);
+    overflow-y: auto;
+}
+
+.table {
+    color: #fff;
+}
+
+.table th {
+    border-top: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.table td {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Additional styling for satellite dropdown selector */
+#satellite-dropdown {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Make dropdown options more visible and improve styling */
+#satellite-dropdown option {
+    padding: 8px 12px;
+    background-color: rgba(33, 33, 33, 0.9);
+    color: white;
+}
+
+#satellite-dropdown option:hover,
+#satellite-dropdown option:focus {
+    background-color: rgba(47, 128, 237, 0.7);
+}
+
+/* Style for the currently selected item */
+#satellite-dropdown option:checked {
+    background-color: rgba(47, 128, 237, 0.9);
+    font-weight: 500;
+}
+
+/* Custom styling for satellite list panel */
+#satellite-selector .card-body {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Add scrollbar styling for better visibility */
+#satellite-selector .card-body::-webkit-scrollbar {
+    width: 0; /* Hide scrollbar but keep scrolling functionality */
+    display: none; /* For Firefox */
+}
+
+/* Hide scrollbars but keep functionality for IE, Edge and Firefox */
+.satellite-list-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* For Chrome, Safari and Opera */
+.satellite-list-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Style the satellite list items */
+.satellite-list-item {
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    padding-left: 30px !important;
+}
+
+.satellite-list-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(3px);
+}
+
+.satellite-list-item.active {
+    background-color: rgba(47, 128, 237, 0.6);
+    border-color: rgba(47, 128, 237, 0.8);
+}
+
+.satellite-list-item::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.satellite-list-item[data-type="space_station"]::before {
+    background-color: #ff9900; /* Orange for space stations */
+}
+
+.satellite-list-item[data-type="cubesat"]::before {
+    background-color: #33cc33; /* Green for cubesats */
+}
+
+.satellite-list-item[data-type="communication"]::before {
+    background-color: #3399ff; /* Blue for communication satellites */
+}
+
+.satellite-list-item[data-type="earth_observation"]::before {
+    background-color: #9966ff; /* Purple for Earth observation satellites */
+}
+
+.satellite-list-item[data-type="weather"]::before {
+    background-color: #ff3399; /* Pink for weather satellites */
+}
+
+/* Add scrollbar styling for better visibility */
+#satellite-selector .card-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+#satellite-selector .card-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+#satellite-selector .card-body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+#satellite-selector .card-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive card columns */
+@media (max-width: 575.98px) {
+    .card-columns {
+        column-count: 1;
+    }
+    .globe-overlay {
+        right: 20px;
+        width: calc(100% - 40px);
+    }
+    .app-title {
+        font-size: 1.2rem;
+    }
+    .side-nav {
+        bottom: 20px;
+        top: auto;
+        right: 20px;
+        transform: none;
+    }
+    .nav-buttons {
+        flex-direction: row;
+    }
+    .nav-tooltip {
+        top: -40px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Remaining media queries */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .card-columns {
+        column-count: 1;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) { 
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) { 
+    .card-columns {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 1200px) {    
+    .card-columns {
+        column-count: 4;
+    }
+}
+
+.noninteractive {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    pointer-events: none;
+}
+
+.interactive {
+    -webkit-touch-callout: auto !important;
+    -webkit-user-select: auto !important;
+    -khtml-user-select: auto !important;
+    -moz-user-select: auto !important;
+    -ms-user-select: auto !important;
+    -o-user-select: auto !important;
+    pointer-events: auto !important;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Status indicator for ISS */
+.status-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: rgba(33, 33, 33, 0.7);
+    backdrop-filter: blur(5px);
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    font-size: 0.9rem;
+}
+
+.pulse {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4CAF50;
+    margin-right: 8px;
+    box-shadow: 0 0 0 rgba(76, 175, 80, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+    }
+}
